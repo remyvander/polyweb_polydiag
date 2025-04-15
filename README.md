@@ -67,7 +67,7 @@ sudo systemctl enable mariadb
 
 Connectez-vous à MariaDB :
 ```sh
-sudo mariadb
+sudo mysql -u root
 ```
 
 Exécutez les commandes suivantes dans le shell MariaDB :
@@ -95,6 +95,23 @@ mysql -u polyweb -p < PolyprojectNGS_schema.sql
 ```
 
 Répétez cette opération pour chaque fichier présent dans l’archive afin de charger tous les schémas nécessaires.
+
+### 3.1.3.4 Chargement d'une procédure SQL pour la table `polyprojectNGS`
+
+Chargez la procédure dans MariaDB avec la commande suivante :
+```sh
+mysql -u polyweb -p < new_project.sql
+```
+
+Vous pouvez également vérifier que la procédure a bien été créée en vous connectant à MariaDB :
+```sh
+sudo mysql -u polyweb -p
+```
+
+Et en listant les procédures disponibles :
+```sql
+SHOW PROCEDURE STATUS WHERE Db = 'polyprojectNGS';
+```
 
 ### 3.1.4 Lancement du serveur Polyweb
 
