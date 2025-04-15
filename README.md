@@ -4,7 +4,7 @@
 
 #### 3.1.1 Prérequis
 
-2. **Pull depuis DockerHub** :
+1. **Pull depuis DockerHub** :
     - Téléchargez l’image via la commande :
       ```sh
       docker pull imaginebioinfo/polyweb:tagname
