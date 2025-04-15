@@ -4,15 +4,6 @@
 
 #### 3.1.1 Prérequis
 
-Pour la création de l’image de `polyweb/core`, nous avons 2 solutions : soit une compilation du Dockerfile, soit une pull d’une image depuis le DockerHub.
-
-1. **Compilation du Dockerfile** :
-    - Téléchargez l’archive contenant les softs et la liste des librairies nécessaires à la compilation.
-    - Lancez la commande :
-      ```sh
-      docker build -t nom_image:TAG .
-      ```
-
 2. **Pull depuis DockerHub** :
     - Téléchargez l’image via la commande :
       ```sh
