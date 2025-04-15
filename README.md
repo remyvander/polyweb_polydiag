@@ -129,3 +129,7 @@ Redémarrez le serveur HTTP en mode premier plan :
 ```sh
 /usr/bin/httpd -DFOREGROUND
 ```
+
+Vous devreiz pouvoir accéder à l'interface de Polyweb sur le port 8989 de votre machine.
+
+(Veuillez noter qu'il faudra créer un utilisateur dan la base pour pouvoir vous connecter à polyweb) 
