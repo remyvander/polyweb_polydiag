@@ -1,5 +1,13 @@
 ## 3 Polyweb
 
+PolyWeb is a web-based platform designed for the centralized visualization and interpretation of genomic variants derived from high-throughput sequencing (WES, WGS, RNA-seq, etc.). Built to support rare disease diagnostics and cohort-based research, PolyWeb integrates variant-level annotations, expression data, and cohort comparisons within a unified interface. It features tight integration with public databases (gnomAD, ClinVar, OMIM) and internal tools such as PolyQuery (for cohort-wide queries), DejaVu (for variant recurrence analysis), and modules for splice prediction, expression outliers, and gene prioritization. 
+
+PolyWeb enables collaborative, iterative exploration of variant data and supports use cases ranging from routine diagnostics to exploratory research.
+
+The platform is primarily written in Perl, and due to its broad functionality and multiple modules, it constitutes a relatively large and complex codebase.
+
+If you are interested in deploying PolyWeb in your own environment, you are welcome to contact us for installation support at bioinformatique@users-imagine.fr.
+
 ### 3.1 Création from scratch de PolyWeb
 
 #### 3.1.1 Prérequis
