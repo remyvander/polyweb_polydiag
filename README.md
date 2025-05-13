@@ -8,136 +8,136 @@ The platform is primarily written in Perl, and due to its broad functionality an
 
 If you are interested in deploying PolyWeb in your own environment, you are welcome to contact us for installation support at bioinformatique@users-imagine.fr.
 
-### 3.1 Création from scratch de PolyWeb
+### 3.1 Creating PolyWeb from Scratch
 
-#### 3.1.1 Prérequis
+#### 3.1.1 Prerequisites
 
-1. **Pull depuis DockerHub** :
-    - Téléchargez l’image via la commande :
+1. **Pull from DockerHub**:
+    - Download the image using the command:
       ```sh
       docker pull imaginebioinfo/polyweb:tagname
       ```
 
-Avant de continuer, créez un groupe Docker, `polyweb` et `mysql`, ainsi que deux utilisateurs `polyweb` et `mysql` :
+Before continuing, create a Docker group, `polyweb` and `mysql`, as well as two users `polyweb` and `mysql`:
 ```sh
 sudo groupadd docker
 sudo groupadd polyweb -g 9999
-sudo useradd polyweb -u 9999 -g polyweb -G docker -m -p "mon mot depasse" -s "/bin/bash"
+sudo useradd polyweb -u 9999 -g polyweb -G docker -m -p "mypassword" -s "/bin/bash"
 sudo groupadd mysql -g 27
 sudo useradd mysql -u 27 -g mysql -M
 ```
 
-Créez maintenant le répertoire source pour polyweb, qui sera la source de toute l’installation :
+Now create the source directory for polyweb, which will serve as the source for the entire installation:
 ```sh
 sudo mkdir /poly-disk
 sudo chown polyweb:polyweb /poly-disk
 ```
 
-### 3.1.2 Configuration de polyweb-core.cfg
+### 3.1.2 Configuration of polyweb-core.cfg
 
-Le fichier de configuration `polyweb-core.cfg` se trouve dans `polyweb-install/conf/polyweb-core.cfg`.
+The configuration file `polyweb-core.cfg` is located in `polyweb-install/conf/polyweb-core.cfg`.
 
-Modifiez le paramètre `SOURCE` pour qu'il pointe vers le chemin de base de `poly-disk` : `SOURCE/poly-disk`.
+Modify the `SOURCE` parameter to point to the base path of `poly-disk`: `SOURCE/poly-disk`.
 
-Une fois cette configuration faite, lancez le script d’installation :
+Once this configuration is complete, run the installation script:
 ```sh
 /polyweb-install/install/install-polyweb.sh
 ```
 
-Ce script se chargera de créer l’arborescence et de créer des liens symboliques.
+This script will create the directory structure and symbolic links.
 
-### 3.1.3 Configuration de la base de données
+### 3.1.3 Database Configuration
 
-#### 3.1.3.1 Installation de MariaDB
+#### 3.1.3.1 Installing MariaDB
 
-Installez MariaDB sur votre système. Sur un système basé sur Debian ou Ubuntu, utilisez les commandes suivantes :
+Install MariaDB on your system. On a Debian or Ubuntu-based system, use the following commands:
 ```sh
 sudo apt-get update
 sudo apt-get install mariadb-server
 ```
 
-Assurez-vous que le service MariaDB est bien démarré :
+Ensure that the MariaDB service is running:
 ```sh
 sudo systemctl start mariadb
 sudo systemctl enable mariadb
 ```
 
-#### 3.1.3.2 Création de l’utilisateur
+#### 3.1.3.2 Creating the User
 
-Connectez-vous à MariaDB :
+Connect to MariaDB:
 ```sh
 sudo mysql -u root
 ```
 
-Exécutez les commandes suivantes dans le shell MariaDB :
+Run the following commands in the MariaDB shell:
 ```sql
-CREATE USER 'polyweb'@'localhost' IDENTIFIED BY 'mot_de_passe';
+CREATE USER 'polyweb'@'localhost' IDENTIFIED BY 'password';
 GRANT ALL PRIVILEGES ON *.* TO 'polyweb'@'localhost' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 ```
 
-#### 3.1.3.3 Chargement des schémas de base de données
+#### 3.1.3.3 Loading Database Schemas
 
-Téléchargez ou placez l’archive `sql-dumps.tar` sur votre système, puis extrayez le contenu :
+Download or place the `sql-dumps.tar` archive on your system, then extract its contents:
 ```sh
 tar -xvf sql-dumps.tar
 ```
 
-Pour charger chaque dump dans MariaDB, utilisez la commande suivante (à adapter selon le nom de vos fichiers SQL) :
+To load each dump into MariaDB, use the following command (adjust based on your SQL file names):
 ```sh
-mysql -u polyweb -p < nom_du_fichier.sql
+mysql -u polyweb -p < file_name.sql
 ```
 
-Par exemple :
+For example:
 ```sh
 mysql -u polyweb -p < PolyprojectNGS_schema.sql
 ```
 
-Répétez cette opération pour chaque fichier présent dans l’archive afin de charger tous les schémas nécessaires.
+Repeat this process for each file in the archive to load all necessary schemas.
 
-### 3.1.3.4 Chargement d'une procédure SQL pour la table `polyprojectNGS`
+### 3.1.3.4 Loading a SQL Procedure for the `polyprojectNGS` Table
 
-Chargez la procédure dans MariaDB avec la commande suivante :
+Load the procedure into MariaDB with the following command:
 ```sh
 mysql -u polyweb -p < new_project.sql
 ```
 
-Vous pouvez également vérifier que la procédure a bien été créée en vous connectant à MariaDB :
+You can also verify that the procedure was created by connecting to MariaDB:
 ```sh
 sudo mysql -u polyweb -p
 ```
 
-Et en listant les procédures disponibles :
+And listing the available procedures:
 ```sql
 SHOW PROCEDURE STATUS WHERE Db = 'polyprojectNGS';
 ```
 
-### 3.1.4 Lancement du serveur Polyweb
+### 3.1.4 Starting the Polyweb Server
 
-Pour lancer le serveur Polyweb, suivez les étapes ci-dessous :
+To start the Polyweb server, follow the steps below:
 
-Exécutez le script `start_services.sh` :
+Run the `start_services.sh` script:
 ```sh
 ./start_services.sh
 ```
 
-Si le conteneur tombe en erreur, alors il faut accéder au conteneur :
+If the container fails, you need to access the container:
 
-Accédez au conteneur :
+Access the container:
 ```sh
 docker exec -it <container_name> /bin/bash
 ```
 
-Supprimez le fichier `http.pid` s’il existe :
+Delete the `http.pid` file if it exists:
 ```sh
 rm -f /var/run/http.pid
 ```
 
-Redémarrez le serveur HTTP en mode premier plan :
+Restart the HTTP server in foreground mode:
 ```sh
 /usr/bin/httpd -DFOREGROUND
 ```
 
-Vous devreiz pouvoir accéder à l'interface de Polyweb sur le port 8989 de votre machine.
+You should now be able to access the Polyweb interface on port 8989 of your machine.
 
-(Veuillez noter qu'il faudra créer un utilisateur dan la base pour pouvoir vous connecter à polyweb) 
+(Note: you will need to create a user in the database to log in to Polyweb)
