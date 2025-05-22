@@ -15,7 +15,7 @@ If you are interested in deploying PolyWeb in your own environment, you are welc
 1. **Pull from DockerHub**:
     - Download the image using the command:
       ```sh
-      docker pull imaginebioinfo/polyweb:tagname
+      docker pull imaginebioinfo/polyweb:V3
       ```
 
 Before continuing, create a Docker group, `polyweb` and `mysql`, as well as two users `polyweb` and `mysql`:
